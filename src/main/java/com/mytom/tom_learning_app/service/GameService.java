@@ -1,0 +1,80 @@
+package com.mytom.tom_learning_app.service;
+
+import com.mytom.tom_learning_app.entity.User;
+import com.mytom.tom_learning_app.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@Service
+@RequiredArgsConstructor
+@SuppressWarnings("null")
+public class GameService {
+    
+    private final UserRepository userRepository;
+    
+    /**
+     * 获取用户首页数据
+     * 如果用户不存在，创建新用户并初始化100钻石
+     * @param userId 用户ID
+     * @return 用户的钻石数
+     */
+    @Transactional
+    public Map<String, Object> getHomeData(Long userId) {
+        User user = userRepository.findById(userId).orElseGet(() -> {
+            // 用户不存在，创建新用户
+            User newUser = new User();
+            newUser.setId(userId);
+            newUser.setUsername("用户" + userId);
+            newUser.setDiamondBalance(100); // 初始100钻石
+            return userRepository.save(newUser);
+        });
+        
+        Map<String, Object> result = new HashMap<>();
+        result.put("userId", user.getId());
+        result.put("username", user.getUsername());
+        result.put("diamonds", user.getDiamondBalance());
+        result.put("totalStudyMinutes", user.getTotalStudyMinutes());
+        result.put("lastCheckIn", user.getLastCheckIn());
+        
+        return result;
+    }
+    
+    /**
+     * 增加用户钻石
+     * @param userId 用户ID
+     * @param amount 增加的钻石数量
+     * @return 更新后的用户信息
+     */
+    @Transactional
+    public Map<String, Object> addDiamonds(Long userId, int amount) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("用户不存在，ID: " + userId));
+        
+        // 增加钻石
+        user.setDiamondBalance(user.getDiamondBalance() + amount);
+        user = userRepository.save(user);
+        
+        Map<String, Object> result = new HashMap<>();
+        result.put("userId", user.getId());
+        result.put("username", user.getUsername());
+        result.put("diamonds", user.getDiamondBalance());
+        result.put("message", "成功增加 " + amount + " 钻石！");
+        
+        return result;
+    }
+    
+    /**
+     * 获取用户信息
+     * @param userId 用户ID
+     * @return 用户实体
+     */
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("用户不存在，ID: " + userId));
+    }
+}
+

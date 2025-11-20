@@ -1,0 +1,48 @@
+# Maven
+target/
+!target/*.jar
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.classpath
+.project
+.settings/
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# 文档和脚本
+*.md
+*.txt
+*.bat
+*.sh
+
+# 日志
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 临时文件
+*.tmp
+*.bak
+*.swp
+*~
+
+# 测试和示例
+src/test/
+*.test.js
+
+# 其他不需要的文件
+README.md
+LICENSE
+.env
+.env.*
+

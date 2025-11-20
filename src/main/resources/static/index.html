@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐱 我的汤姆猫学习版</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部导航栏 -->
+        <header class="header">
+            <div class="user-info">
+                <span id="username" class="username">游客</span>
+                <div class="diamond-display">
+                    <span class="diamond-icon">💎</span>
+                    <span id="diamondBalance">0</span>
+                </div>
+            </div>
+            <button id="checkinBtn" class="btn btn-checkin">📅 每日签到</button>
+        </header>
+
+        <!-- 主要内容区域 -->
+        <div class="main-content">
+            <!-- 左侧面板：汤姆猫 -->
+            <div class="left-panel">
+                <div class="tom-container">
+                    <div class="tom-cat">
+                        <div class="cat-emoji">🐱</div>
+                        <div id="catClothes" class="cat-clothes"></div>
+                    </div>
+                    <div class="room-furniture" id="roomFurniture">
+                        <!-- 家具将动态添加 -->
+                    </div>
+                </div>
+                
+                <!-- 学习计时器 -->
+                <div class="study-timer">
+                    <h3>📚 学习计时</h3>
+                    <div class="timer-display" id="timerDisplay">00:00:00</div>
+                    <div class="timer-controls">
+                        <button id="startStudyBtn" class="btn btn-primary">开始学习</button>
+                        <button id="endStudyBtn" class="btn btn-danger" disabled>结束学习</button>
+                    </div>
+                    <div class="study-info">
+                        <p>💡 每学习10分钟获得1钻石</p>
+                        <p>总学习时长: <span id="totalStudyMinutes">0</span> 分钟</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧面板：商店和背包 -->
+            <div class="right-panel">
+                <!-- 标签页 -->
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="shop">🏪 商店</button>
+                    <button class="tab-btn" data-tab="inventory">🎒 背包</button>
+                </div>
+
+                <!-- 商店内容 -->
+                <div id="shopTab" class="tab-content active">
+                    <div class="category-tabs">
+                        <button class="category-btn active" data-type="FOOD">🍔 食物</button>
+                        <button class="category-btn" data-type="CLOTH">👕 衣服</button>
+                        <button class="category-btn" data-type="FURNITURE">🛋️ 家具</button>
+                    </div>
+                    <div id="itemsList" class="items-list">
+                        <!-- 商品将动态加载 -->
+                    </div>
+                </div>
+
+                <!-- 背包内容 -->
+                <div id="inventoryTab" class="tab-content">
+                    <div id="inventoryList" class="items-list">
+                        <!-- 背包物品将动态加载 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 登录模态框 -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h2>欢迎来到汤姆猫学习版！🐱</h2>
+            <input type="text" id="usernameInput" placeholder="请输入用户名" class="input">
+            <div class="modal-buttons">
+                <button id="loginBtn" class="btn btn-primary">登录</button>
+                <button id="registerBtn" class="btn btn-success">注册新用户</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+

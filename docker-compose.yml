@@ -1,0 +1,50 @@
+# ============================================
+# Docker Compose 配置 - 本地开发测试用
+# ============================================
+
+version: '3.8'
+
+services:
+  # 后端服务
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tom-learning-backend
+    ports:
+      - "8081:8080"
+    environment:
+      # 使用 H2 内存数据库（本地测试）
+      - SPRING_PROFILES_ACTIVE=default
+      - SERVER_PORT=8080
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/api/game/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+
+  # PostgreSQL 数据库（可选，模拟生产环境）
+  postgres:
+    image: postgres:16-alpine
+    container_name: tom-learning-db
+    environment:
+      POSTGRES_DB: tomdb
+      POSTGRES_USER: tomuser
+      POSTGRES_PASSWORD: tompassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tomuser -d tomdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+
