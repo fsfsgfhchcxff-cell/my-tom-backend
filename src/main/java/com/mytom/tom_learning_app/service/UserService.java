@@ -28,6 +28,32 @@ public class UserService {
         return userRepository.save(user);
     }
     
+    // 🎯 使用指定ID创建用户（用于前端智能ID生成）
+    @Transactional
+    public User createUserWithId(Long userId, String username) {
+        if (userRepository.existsByUsername(username)) {
+            throw new RuntimeException("用户名已存在");
+        }
+        
+        // 检查ID是否已被占用
+        if (userId != null && userRepository.existsById(userId)) {
+            throw new RuntimeException("该ID已被占用，请更换用户名");
+        }
+        
+        User user = new User();
+        if (userId != null) {
+            user.setId(userId);
+        }
+        user.setUsername(username);
+        user.setDiamondBalance(100); // 新用户初始100钻石
+        return userRepository.save(user);
+    }
+    
+    // 检查用户名是否存在
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+    
     // 获取用户
     public User getUser(Long userId) {
         return userRepository.findById(userId)

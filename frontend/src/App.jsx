@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { Cat, Heart, ShoppingBag, Clock, Sparkles } from 'lucide-react'
-import HomePage from './components/HomePage'
-import StudyTimer from './components/StudyTimer'
-import Shop from './components/Shop'
-import LoginModal from './components/LoginModal'
+import HomePage from './components/HomePage.jsx'
+import StudyTimer from './components/StudyTimer.jsx'
+import ShopPage from './components/ShopPage.jsx'
+import InventoryPage from './components/InventoryPage.jsx'
+import LoginModal from './components/LoginModal.jsx'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home')
@@ -83,7 +84,7 @@ function App() {
         <div className="mb-20">
           {currentPage === 'home' && <HomePage userId={userId} onLogout={handleLogout} />}
           {currentPage === 'study' && <StudyTimer userId={userId} />}
-          {currentPage === 'shop' && <Shop userId={userId} />}
+          {currentPage === 'shop' && <ShopPage userId={userId} />}
         </div>
       </div>
 

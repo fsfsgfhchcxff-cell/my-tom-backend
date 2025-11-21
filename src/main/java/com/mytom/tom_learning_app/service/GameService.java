@@ -18,20 +18,14 @@ public class GameService {
     
     /**
      * 获取用户首页数据
-     * 如果用户不存在，创建新用户并初始化100钻石
+     * 如果用户不存在，抛出异常（需要先注册）
      * @param userId 用户ID
      * @return 用户的钻石数
      */
     @Transactional
     public Map<String, Object> getHomeData(Long userId) {
-        User user = userRepository.findById(userId).orElseGet(() -> {
-            // 用户不存在，创建新用户
-            User newUser = new User();
-            newUser.setId(userId);
-            newUser.setUsername("用户" + userId);
-            newUser.setDiamondBalance(100); // 初始100钻石
-            return userRepository.save(newUser);
-        });
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("用户不存在，请先注册"));
         
         Map<String, Object> result = new HashMap<>();
         result.put("userId", user.getId());

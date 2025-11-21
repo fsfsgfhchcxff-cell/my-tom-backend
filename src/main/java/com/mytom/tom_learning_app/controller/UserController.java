@@ -10,14 +10,40 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class UserController {
     
     private final UserService userService;
     
-    // 创建用户
+    // 🎯 新用户注册接口（支持指定ID）
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@RequestBody Map<String, Object> request) {
+        try {
+            String username = (String) request.get("username");
+            Long userId = request.containsKey("id") ? 
+                Long.valueOf(request.get("id").toString()) : null;
+            
+            // 检查用户名是否已存在
+            if (userService.existsByUsername(username)) {
+                return ResponseEntity.badRequest()
+                    .body(Map.of("message", "用户名已存在，请尝试登录！"));
+            }
+            
+            // 创建新用户
+            User user = userService.createUserWithId(userId, username);
+            return ResponseEntity.ok(Map.of(
+                "message", "注册成功！",
+                "user", user
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                .body(Map.of("message", e.getMessage()));
+        }
+    }
+    
+    // 创建用户（旧接口，保留兼容性）
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody Map<String, String> request) {
         try {
