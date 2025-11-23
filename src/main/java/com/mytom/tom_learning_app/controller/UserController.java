@@ -3,6 +3,8 @@ package com.mytom.tom_learning_app.controller;
 import com.mytom.tom_learning_app.entity.User;
 import com.mytom.tom_learning_app.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,31 +17,47 @@ import java.util.Map;
 @CrossOrigin(origins = "*")
 public class UserController {
     
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
     
     // 🎯 新用户注册接口（支持指定ID）
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody Map<String, Object> request) {
         try {
+            logger.info("收到注册请求: {}", request);
+            
             String username = (String) request.get("username");
+            if (username == null || username.trim().isEmpty()) {
+                logger.warn("用户名为空");
+                return ResponseEntity.badRequest()
+                    .body(Map.of("success", false, "message", "用户名不能为空"));
+            }
+            
             Long userId = request.containsKey("id") ? 
                 Long.valueOf(request.get("id").toString()) : null;
             
+            logger.info("注册用户: username={}, userId={}", username, userId);
+            
             // 检查用户名是否已存在
             if (userService.existsByUsername(username)) {
+                logger.warn("用户名已存在: {}", username);
                 return ResponseEntity.badRequest()
-                    .body(Map.of("message", "用户名已存在，请尝试登录！"));
+                    .body(Map.of("success", false, "message", "用户名已存在，请尝试登录！"));
             }
             
             // 创建新用户
             User user = userService.createUserWithId(userId, username);
+            logger.info("用户注册成功: id={}, username={}", user.getId(), user.getUsername());
+            
             return ResponseEntity.ok(Map.of(
+                "success", true,
                 "message", "注册成功！",
                 "user", user
             ));
         } catch (Exception e) {
+            logger.error("注册失败: {}", e.getMessage(), e);
             return ResponseEntity.badRequest()
-                .body(Map.of("message", e.getMessage()));
+                .body(Map.of("success", false, "message", e.getMessage()));
         }
     }
     
