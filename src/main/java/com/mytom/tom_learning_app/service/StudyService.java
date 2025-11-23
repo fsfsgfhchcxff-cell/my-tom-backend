@@ -13,7 +13,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@SuppressWarnings("null")
 public class StudyService {
     
     private final StudySessionRepository sessionRepository;
