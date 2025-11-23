@@ -11,7 +11,6 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-@SuppressWarnings("null")
 public class GameService {
     
     private final UserRepository userRepository;
